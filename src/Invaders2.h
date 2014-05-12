@@ -80,8 +80,6 @@ class Game
         bool keyHit();
         bool writeToFile(const char*, ...);
         // end system.cpp functions
-        // start player.cpp functions
-        // end player.cpp functions
         // start movement.cpp functions
         bool moveAliens(time_t);
         bool movePlayer(char);
@@ -93,7 +91,7 @@ class Game
         boss bossShip;
         aliens alienGroup;
         const char ALIEN = '@';
-        const char PLAYER = 'P';
+        const char PLAYER = 'A';
         const char BARRIERMAIN = '#';
         const char BARRIERCORNER1 = '/';
         const char BARRIERCORNER2 = '\\';

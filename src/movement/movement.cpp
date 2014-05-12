@@ -108,16 +108,10 @@ bool Game::movePlayer(char movement)
 
 bool Game::movePos(char movement)
 {
-    char tempChar = ' ';
-    char buffer[256] = {0};
-
-//    string strX = "", strY = itoa(tempY, buffer, 10);
     if(movement == 'R') // Fixed
     {
         if(board[player.y+1][player.x+1] == ' ' || board[player.y][player.x+1] == BULLET)
         {
-//            if(DEBUG == true)
-//                Game::writeToFile("Allowed Move | ");
             player.x++;
             board[player.y][player.x-1] = ' ';
             board[player.y][player.x] = PLAYER;
@@ -125,26 +119,22 @@ bool Game::movePos(char movement)
         }
         else
         {
-//            if(DEBUG == true)
-//                Game::writeToFile("Invalid Move | ");
             return false;
         }
     }
-/*
-    if(movement == 'L') // Unknown
+    if(movement == 'L')
     {
-        if(tempX - 1 >= 0 && board[tempY][tempX-1] == ' ')
+        if(board[player.y][player.x-1] == ' ' || board[player.y][player.x-1] == BULLET)
         {
-            if(DEBUG == true)
-                Game::writeToFile("Allowed Move | ");
-            x--;
+            player.x--;
+            board[player.y][player.x+1] = ' ';
+            board[player.y][player.x] = PLAYER;
+            return true;
         }
         else
         {
-            if(DEBUG == true)
-                Game::writeToFile("Invalid Move | ");
+            return false;
         }
     }
-*/
     return true;
 }

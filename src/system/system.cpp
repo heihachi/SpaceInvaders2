@@ -33,15 +33,12 @@ bool Game::cursesMain()
     //set default space
     player.lives = 3;
     player.score = 0;
-    //writeToFile("%i:%i | %i:%i", parent_x, parent_y, player.x, player.y);
     player.x = 14;
     player.y = parent_y - (score_size + 3);
-    //writeToFile(" | %i:%i\n", player.x, player.y);
 
     WINDOW *field = newwin(parent_y - score_size, parent_x, 0, 0);
     WINDOW *score = newwin(score_size, parent_x, parent_y - score_size, 0);
 
-//    SpaceInvaders.drawBorders(field);
     drawBorders(score);
     buildGame(board);
 
@@ -78,20 +75,12 @@ bool Game::cursesMain()
         }
 
         // draw to our windows
-        //mvwprintw(field, 1, 1, "Field");
-        //mvwprintw(score, 1, 1, "Score");
-        //for(int i = 0;i<5;i++)
-        //{
-        //    mvwprintw(field, i+2, 1, board[i][0].c_str());
-       //}
-
         for(int i = 0; i < BOARDROWSIZE;i++)
         {
             for(int j = 0; j < BOARDCOLUMNSIZE;j++)
             {
                 wmove(field, i, j);
                 waddch(field, board[i][j]);
-//                mvwprintw(field, i, j, "%c", board[i][j]);
             }
         }
 
@@ -103,7 +92,6 @@ bool Game::cursesMain()
 
         if(DEBUG == true)
         {
-            //int temp = parent_x - (score_size + 2);
             string screensizex = itoa(new_x, buffer, 10);
             string screensizey = itoa(parent_y, buffer, 10);
             mvwprintw(score, 1, 30, "X: ");
@@ -119,27 +107,26 @@ bool Game::cursesMain()
         {
             bool allowed = false;
             key = getch();
+            bool exit= false;
             switch(key)
             {
-                //case KEY_LEFT:
-                //    printw("Left");
-                //    allowed = true;
-                //    movePlayer('L');
-//              //      SpaceInvaders.player.x = SpaceInvaders.movePos(SpaceInvaders.player.x, SpaceInvaders.player.y, 'L', topBoard);
-                //    break;
+                case KEY_LEFT:
+                    allowed = movePos('L');
+                    break;
                 case KEY_RIGHT:
                     allowed = movePos('R');
-/*                    if(allowed == true)
-                    {
-                        wmove(field, player.y, player.x-1);
-                        waddch(field, ' ');
-                        wmove(field, player.y, player.x);
-                        waddch(field, PLAYER);
-                    }*/
+                    break;
+                case 27: // esc to quit
+                    exit = true;
+                    break;
+                case 32: // space
+                    // shoot
                     break;
                 default:
                     break;
             }
+            if(exit == true)
+                break;
         }
 
         // refresh each window
@@ -148,14 +135,6 @@ bool Game::cursesMain()
     }
     endwin();
     // */
-    for(int i = 0; i < BOARDROWSIZE;i++)
-    {
-        for(int j = 0; j < BOARDCOLUMNSIZE;j++)
-        {
-            cout << board[i][j];
-        }
-        cout << endl;
-    }
 }
 
 bool Game::drawBorders(WINDOW *screen)
@@ -227,30 +206,6 @@ bool Game::buildGame(char board[BOARDROWSIZE][BOARDCOLUMNSIZE])
                     board[i][j] = ' ';
                 }
             }
-            else if(i>=15 && i <=17)
-            {
-                if(j == 11 || j == ALIENSTARTY || j == 45 || j == 62)
-                {
-                    if(i == 15)
-                    {
-                        board[i][j] = BARRIERCORNER1;
-                        writeToFile("|%i,%i = %c|\n", i, j, board[i][j]);
-                    }
-                    else
-                    {
-                        board[i][j] = BARRIERMAIN;
-                        writeToFile("|%i,%i = %c|\n", i, j, board[i][j]);
-                    }
-                }
-                if(j == 0 || j == BOARDCOLUMNSIZE-1)
-                {
-                    board[i][j] = '|';
-                }
-                else
-                {
-                    board[i][j] = ' ';
-                }
-            }
             else
             {
                 if(j == 0 || j == BOARDCOLUMNSIZE-1)
@@ -270,6 +225,122 @@ bool Game::buildGame(char board[BOARDROWSIZE][BOARDCOLUMNSIZE])
             }
         }
         isAlien = true;
+    }
+    //build barrier here
+    for(int i = 15;i<=17;i++)
+    {
+        for(int j = 0;j<BOARDCOLUMNSIZE;j++)
+        {
+            switch(j)
+            {
+                case 11:
+                    if(i == 15)
+                    {
+                        board[i][j] = BARRIERCORNER1;
+                        board[i][j+1] = BARRIERMAIN;
+                        board[i][j+2] = BARRIERMAIN;
+                        board[i][j+3] = BARRIERMAIN;
+                        board[i][j+4] = BARRIERMAIN;
+                        board[i][j+5] = BARRIERMAIN;
+                        board[i][j+6] = BARRIERCORNER2;
+                    }
+                    else if(i == 16 || i == 17)
+                    {
+                        for(int x = 0;x<7;x++)
+                        {
+                            if(x == 2 || x == 3 || x == 4)
+                            {
+                                board[i][j+x] = ' ';
+                            }
+                            else
+                            {
+                                board[i][j+x] = BARRIERMAIN;
+                            }
+                        }
+                    }
+                    break;
+                case 28:
+                    if(i == 15)
+                    {
+                        board[i][j] = BARRIERCORNER1;
+                        board[i][j+1] = BARRIERMAIN;
+                        board[i][j+2] = BARRIERMAIN;
+                        board[i][j+3] = BARRIERMAIN;
+                        board[i][j+4] = BARRIERMAIN;
+                        board[i][j+5] = BARRIERMAIN;
+                        board[i][j+6] = BARRIERCORNER2;
+                    }
+                    else if(i == 16 || i == 17)
+                    {
+                        for(int x = 0;x<7;x++)
+                        {
+                            if(x == 2 || x == 3 || x == 4)
+                            {
+                                board[i][j+x] = ' ';
+                            }
+                            else
+                            {
+                                board[i][j+x] = BARRIERMAIN;
+                            }
+                        }
+                    }
+                    break;
+                case 45:
+                    if(i == 15)
+                    {
+                        board[i][j] = BARRIERCORNER1;
+                        board[i][j+1] = BARRIERMAIN;
+                        board[i][j+2] = BARRIERMAIN;
+                        board[i][j+3] = BARRIERMAIN;
+                        board[i][j+4] = BARRIERMAIN;
+                        board[i][j+5] = BARRIERMAIN;
+                        board[i][j+6] = BARRIERCORNER2;
+                    }
+                    else if(i == 16 || i == 17)
+                    {
+                        for(int x = 0;x<7;x++)
+                        {
+                            if(x == 2 || x == 3 || x == 4)
+                            {
+                                board[i][j+x] = ' ';
+                            }
+                            else
+                            {
+                                board[i][j+x] = BARRIERMAIN;
+                            }
+                        }
+                    }
+                    break;
+                case 62:
+                    if(i == 15)
+                    {
+                        board[i][j] = BARRIERCORNER1;
+                        board[i][j+1] = BARRIERMAIN;
+                        board[i][j+2] = BARRIERMAIN;
+                        board[i][j+3] = BARRIERMAIN;
+                        board[i][j+4] = BARRIERMAIN;
+                        board[i][j+5] = BARRIERMAIN;
+                        board[i][j+6] = BARRIERCORNER2;
+                    }
+                    else if(i == 16 || i == 17)
+                    {
+                        for(int x = 0;x<7;x++)
+                        {
+                            if(x == 2 || x == 3 || x == 4)
+                            {
+                                board[i][j+x] = ' ';
+                            }
+                            else
+                            {
+                                board[i][j+x] = BARRIERMAIN;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
     if(DEBUG == true)
     {
