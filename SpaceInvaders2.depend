@@ -1,0 +1,27 @@
+# depslib dependency file v1.0
+1399863877 source:c:\users\ashley\downloads\heihachi\homework\projects\spaceinvaders2\src\movement\movement.cpp
+	"../Invaders2.h"
+
+1399863332 c:\users\ashley\downloads\heihachi\homework\projects\spaceinvaders2\src\invaders2.h
+	<curses.h>
+	<iostream>
+	<string>
+	<cstdlib>
+	<ctime>
+	<fstream>
+	<vector>
+	<windows.h>
+	<unistd.h>
+
+1399265498 c:\users\ashley\downloads\heihachi\homework\projects\spaceinvaders2\inc\curses.h
+	<stdarg.h>
+	<stddef.h>
+	<stdio.h>
+	<wchar.h>
+
+1399857360 source:c:\users\ashley\downloads\heihachi\homework\projects\spaceinvaders2\src\invaders2.cpp
+	"Invaders2.h"
+
+1399863318 source:c:\users\ashley\downloads\heihachi\homework\projects\spaceinvaders2\src\system\system.cpp
+	"../Invaders2.h"
+
