@@ -25,8 +25,9 @@ const bool DEBUG = false;
 
 struct missle
 {
-    int x, y;
-    char enabled, direction, posture, type;
+    int x, y; // where its at
+    char direction; // where its going / who owns it U for player D for aliens
+    bool enabled; // is it visible?
 };
 
 struct barrierpiece
@@ -75,6 +76,7 @@ class Game
         Game();
         // Start system.cpp functions
         bool cursesMain();
+        bool introStart();
         bool drawBorders(WINDOW*);
         bool buildGame(char[22][80]);
         bool keyHit();
@@ -96,6 +98,11 @@ class Game
         const char BARRIERCORNER1 = '/';
         const char BARRIERCORNER2 = '\\';
         const char BULLET = '!';
+        const char BORDER1 = '+';
+        const char BORDER2 = '-';
+        const char BORDER3 = '|';
+        static const int ROWS = 25;
+        static const int COLUMNS = 80;
         static const int BOARDROWSIZE = 22;
         static const int BOARDCOLUMNSIZE = 80;
         const int ALIENSTARTY = 29;

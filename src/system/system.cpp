@@ -6,16 +6,65 @@
 
 Game::Game()
 {
-    //we need to build the game
+    //we need to build the game and set some variables
     alienGroup.missles = 0;
     alienGroup.moveTowards = true;
     alienGroup.reachedEdge = false;
-    Game::cursesMain();
+    player.bullet.enabled = false;
+    Game::introStart();
 }
 
 Game::~Game()
 {
     //nothing
+}
+
+bool Game::introStart()
+{
+    initscr();
+    noecho();
+    curs_set(FALSE);
+
+    getmaxyx(stdscr, parent_y, parent_x);
+    WINDOW *intro = newwin(COLUMNS, ROWS, 0, 0);
+
+    ifstream file;
+    file.open("src/intro.txt");
+    if(file.good())
+    {
+        string tempStr = "";
+        vector<string> tempVector;
+        char tempChar = ' ';
+        int counter = 0;
+        while(getline(file, tempStr))
+        {
+            tempVector.push_back(tempStr);
+        }
+        file.close();
+
+        for(int x = 0;x<tempVector.size();x++)
+            printw("%s", tempVector[x].c_str());
+
+        bool loop = true;
+        while(loop == true)
+        {
+            char ch = getch();
+            switch(ch)
+            {
+                case '\n':
+                    loop = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+        endwin();
+        Game::cursesMain();
+    }
+    else
+    {
+        cout << "File not found!" << endl;
+    }
 }
 
 bool Game::cursesMain()
@@ -70,7 +119,6 @@ bool Game::cursesMain()
             wclear(field);
             wclear(score);
 
-            drawBorders(field);
             drawBorders(score);
         }
 
@@ -80,7 +128,15 @@ bool Game::cursesMain()
             for(int j = 0; j < BOARDCOLUMNSIZE;j++)
             {
                 wmove(field, i, j);
-                waddch(field, board[i][j]);
+                // check if our bullet should be seen
+                if(board[i][j] == BULLET && player.bullet.enabled == true)
+                    waddch(field, board[i][j]);
+                // if it shouldnt be seen then we remove it
+                else if(board[i][j] == BULLET && player.bullet.enabled == false)
+                    waddch(field, ' ');
+                // print everything else
+                else
+                    waddch(field, board[i][j]);
             }
         }
 
@@ -102,7 +158,42 @@ bool Game::cursesMain()
 
         bool aliensMovement = true;
         aliensMovement = moveAliens(rawtime);
-
+        if(player.bullet.enabled == true)
+        {
+            if(player.bullet.direction == 'U') // safety check
+            {
+                if(board[player.bullet.x][player.bullet.y-1] > 0)
+                {
+                    char temp = board[player.bullet.x][player.bullet.y-1];
+                    switch(temp)
+                    {
+                        // all these will trigger the last case
+                        case '@':
+                        case '#':
+                        case '/':
+                        case '\\':
+                        case '+': // most likely never reach here
+                        case '-':
+                        case '|':
+                            temp = ' ';
+                            player.bullet.enabled = false;
+                            break;
+                        default: // spaces and whatnot
+                            writeToFile("%i,%i = %c\n%i,%i",player.bullet.x,player.bullet.y-1,player.bullet.x,player.bullet.y);
+                            board[player.bullet.x][player.bullet.y-1] = BULLET;
+                            board[player.bullet.x][player.bullet.y] = ' ';
+                            player.bullet.y = player.bullet.y-1;
+//                            player.bullet.enabled = false;
+                            break;
+                    }
+                }
+                else
+                {
+                    writeToFile("Bullet hits wall\n");
+                    player.bullet.enabled = false;
+                }
+            }
+        }
         if(keyHit())
         {
             bool allowed = false;
@@ -121,6 +212,28 @@ bool Game::cursesMain()
                     break;
                 case 32: // space
                     // shoot
+                    if(player.bullet.enabled != true)
+                    {
+                        player.bullet.enabled = true;
+                        player.bullet.x = player.x;
+                        player.bullet.y = player.y-1;
+                        player.bullet.direction = 'U';
+                        board[player.x][player.y-1] = BULLET;
+                        writeToFile("Player: %i,%i | Bullet: %i,%i\n",player.x,player.y,player.bullet.x,player.bullet.y);
+                    }
+                    else
+                        cout << ""; // nothing
+                    break;
+                case KEY_UP:
+                    writeToFile("Here1\n");
+                    player.bullet.enabled = true;
+                    writeToFile("Here2\n");
+                    player.bullet.x = 63;
+                    writeToFile("Here3\n");
+                    player.bullet.y = 18;
+                    writeToFile("Here4\n");
+                    player.bullet.direction = 'U';
+                    writeToFile("Here5\n");
                     break;
                 default:
                     break;
@@ -135,6 +248,7 @@ bool Game::cursesMain()
     }
     endwin();
     // */
+    return true;
 }
 
 bool Game::drawBorders(WINDOW *screen)
