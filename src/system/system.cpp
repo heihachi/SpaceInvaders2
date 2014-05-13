@@ -23,47 +23,92 @@ bool Game::introStart()
 {
     initscr();
     noecho();
+    nodelay(stdscr, true);
     curs_set(FALSE);
 
     getmaxyx(stdscr, parent_y, parent_x);
     WINDOW *intro = newwin(COLUMNS, ROWS, 0, 0);
 
+    vector<string> tempVector;
+    vector<string> tempVector1;
+    string tempStr = "";
+
     ifstream file;
+    ifstream file1;
     file.open("src/intro.txt");
+    file1.open("src/intro1.txt");
+    bool fileExists1 = false, fileExists2 = false;
     if(file.good())
     {
-        string tempStr = "";
-        vector<string> tempVector;
-        char tempChar = ' ';
         int counter = 0;
         while(getline(file, tempStr))
         {
             tempVector.push_back(tempStr);
         }
         file.close();
-
-        for(int x = 0;x<tempVector.size();x++)
-            printw("%s", tempVector[x].c_str());
-
-        bool loop = true;
-        while(loop == true)
-        {
-            char ch = getch();
-            switch(ch)
-            {
-                case '\n':
-                    loop = false;
-                    break;
-                default:
-                    break;
-            }
-        }
-        endwin();
-        Game::cursesMain();
+        fileExists1 = true;
     }
     else
     {
-        cout << "File not found!" << endl;
+        writeToFile("intro.txt not found!\n");
+    }
+    if(file1.good())
+    {
+        while(getline(file1, tempStr))
+        {
+            tempVector1.push_back(tempStr);
+        }
+        file1.close();
+        fileExists2 = true;
+    }
+    else
+    {
+        writeToFile("intro1.txt not found!\n");
+    }
+    writeToFile("%i,%i\n",fileExists1,fileExists2);
+    if(fileExists1 == true || fileExists2 == true)
+    {
+        bool animation = true;
+        while(1)
+        {
+            bool loop = true;
+            while(loop == true)
+            {
+                if(animation == true)
+                {
+                    for(int x = 0;x<tempVector.size();x++)
+                    {
+                        wclear(intro);
+                        printw("%s", tempVector[x].c_str());
+                        writeToFile("%s\n", tempVector[x].c_str());
+                    }
+
+                    animation = false;
+                }
+                else if(animation == false)
+                {
+                    for(int x = 0;x<tempVector1.size();x++)
+                    {
+                        wclear(intro);
+                        printw("%s", tempVector1[x].c_str());
+                        writeToFile("%s\n", tempVector1[x].c_str());
+                    }
+                    animation = true;
+                }
+                char ch = getch();
+                switch(ch)
+                {
+                    case '\n':
+                        loop = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            break;
+        }
+        endwin();
+        Game::cursesMain();
     }
 }
 

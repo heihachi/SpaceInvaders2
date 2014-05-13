@@ -4,6 +4,15 @@
 //#include "system/system.cpp"
 //#include "movement/movement.cpp"
 
+
+/*
+ * To-Do list:
+ * create animation - convert vectors to character arrays and wmove waddch for easier management and add color
+ * Fix bullets
+ * Get score working
+ * boss
+ * random alien bullets
+*/
 int main()
 {
     Game SpaceInvaders;
