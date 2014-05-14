@@ -111,6 +111,8 @@ class Game
         int ch = 0, parent_x = 0, parent_y = 0, new_x = 0, new_y = 0, scoreInt = 0, score_size = 3, key = 0;
         char buffer[256];
         time_t rawtime;
+        int bulletTimer;
+        int bulletTimerCheck;
         //nothing here atm
 };
 

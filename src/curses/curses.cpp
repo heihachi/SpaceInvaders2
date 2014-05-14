@@ -165,7 +165,7 @@ bool Game::cursesMain()
             drawBorders(score);
         }
 
-        board[20][18] = 'O';
+//        board[20][18] = 'O';
         // draw to our windows
         for(int i = 0; i < BOARDROWSIZE;i++)
         {
@@ -179,7 +179,10 @@ bool Game::cursesMain()
                     waddch(field, board[i][j]);
                 // if it shouldnt be seen then we remove it
                 else if(board[i][j] == BULLET && player.bullet.enabled == false)
+                {
                     waddch(field, ' ');
+                    board[i][j] = ' ';
+                }
                 // print everything else
                 else
                 {
@@ -227,15 +230,18 @@ bool Game::cursesMain()
         }
 
         bool aliensMovement = true;
-        aliensMovement = moveAliens(rawtime);
+//        aliensMovement = moveAliens(rawtime);
         if(player.bullet.enabled == true)
         {
             if(player.bullet.direction == 'U') // safety check
             {
-                writeToFile("Current: %i,%i | New: %i,%i\n", player.bullet.x, player.bullet.y, player.bullet.x, player.bullet.y-1);
-                if(board[player.bullet.x][player.bullet.y-1] == '-')
+                bulletTimerCheck = clock()-bulletTimer;
+                if(bulletTimerCheck > 25)
                 {
-                    char temp = board[player.bullet.x][player.bullet.y-1];
+                    if(DEBUG == true)
+                        writeToFile("Current: %i,%i | New: %i,%i\n", player.bullet.x, player.bullet.y, player.bullet.x-1, player.bullet.y);
+                    char temp = board[player.bullet.x-1][player.bullet.y];
+                    char temp2 = board[player.bullet.x-1][player.bullet.y+1];
                     switch(temp)
                     {
                         // all these will trigger the last case
@@ -244,24 +250,28 @@ bool Game::cursesMain()
                         case '/':
                         case '\\':
                         case '+': // most likely never reach here
-                        case '-':
                         case '|':
-                            temp = ' ';
+                            writeToFile("Collision with [%c]\n", temp);
+                            temp = '%';
+                            temp2 = '%';
+                            writeToFile("Now its [%c]\n", temp);
                             player.bullet.enabled = false;
                             break;
-                        default: // spaces and whatnot
-                            writeToFile("%i,%i = %c\n%i,%i",player.bullet.x,player.bullet.y-1,player.bullet.x,player.bullet.y);
-                            board[player.bullet.x][player.bullet.y-1] = BULLET;
+                        case '-':
+                            if(DEBUG == true)
+                                writeToFile("Bullet hits wall\n");
+                            player.bullet.enabled = false;
                             board[player.bullet.x][player.bullet.y] = ' ';
-                            player.bullet.y = player.bullet.y-1;
-//                            player.bullet.enabled = false;
+                            break;
+                        default: // spaces and whatnot
+                            if(DEBUG == true)
+                                writeToFile("%i,%i = %c\n%i,%i\n",player.bullet.x,player.bullet.y-1,board[player.bullet.x][player.bullet.y],player.bullet.x,player.bullet.y);
+                            board[player.bullet.x-1][player.bullet.y] = BULLET;
+                            board[player.bullet.x][player.bullet.y] = ' ';
+                            player.bullet.x = player.bullet.x-1;
                             break;
                     }
-                }
-                else
-                {
-                    writeToFile("Bullet hits wall\n");
-                    player.bullet.enabled = false;
+                    bulletTimer = clock();
                 }
             }
         }
@@ -285,23 +295,34 @@ bool Game::cursesMain()
                     // shoot
                     if(player.bullet.enabled != true)
                     {
-                        player.bullet.enabled = true;
                         player.bullet.x = player.x;
-                        player.bullet.y = player.y-1;
-                        player.bullet.direction = 'U';
-                        board[player.x][player.y-1] = BULLET;
-                        writeToFile("Player: %i,%i | Bullet: %i,%i\n",player.x,player.y,player.bullet.x,player.bullet.y);
+                        player.bullet.y = player.y;
+                        if(player.bullet.x-1 > 0)
+                        {
+                            player.bullet.enabled = true;
+                            // we need the variables backwards
+                            player.bullet.x = player.y-1;
+                            player.bullet.y = player.x;
+                            player.bullet.direction = 'U';
+                            if(DEBUG == true)
+                                writeToFile("%i,%i = [%c]\n", player.bullet.x-1,player.bullet.y, board[player.bullet.x][player.bullet.y]);
+                            board[player.bullet.x-1][player.bullet.y] = BULLET;
+                            bulletTimer = clock();
+                            if(DEBUG == true)
+                                writeToFile("Player: %i,%i | Bullet: %i,%i\n",player.x,player.y,player.bullet.x,player.bullet.y);
+                        }
                     }
                     else
                         cout << ""; // nothing
                     break;
+                /*
                 case KEY_UP:
                     player.bullet.enabled = true;
                     player.bullet.x = 63;
                     player.bullet.y = 18;
                     player.bullet.direction = 'U';
                     writeToFile("Shot bullet\n");
-                    break;
+                    break;*/
                 default:
                     break;
             }

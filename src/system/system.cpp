@@ -11,6 +11,7 @@ Game::Game()
     alienGroup.moveTowards = true;
     alienGroup.reachedEdge = false;
     player.bullet.enabled = false;
+    writeToFile("<-----------------------------------------New Game----------------------------------------->\n");
     Game::introStart();
 }
 
