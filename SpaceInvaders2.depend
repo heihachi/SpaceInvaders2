@@ -19,9 +19,12 @@
 	<stdio.h>
 	<wchar.h>
 
-1399857360 source:c:\users\ashley\downloads\heihachi\homework\projects\spaceinvaders2\src\invaders2.cpp
+1400026140 source:c:\users\ashley\downloads\heihachi\homework\projects\spaceinvaders2\src\invaders2.cpp
 	"Invaders2.h"
 
-1399950220 source:c:\users\ashley\downloads\heihachi\homework\projects\spaceinvaders2\src\system\system.cpp
+1400026121 source:c:\users\ashley\downloads\heihachi\homework\projects\spaceinvaders2\src\system\system.cpp
+	"../Invaders2.h"
+
+1400035284 source:c:\users\ashley\downloads\heihachi\homework\projects\spaceinvaders2\src\curses\curses.cpp
 	"../Invaders2.h"
 

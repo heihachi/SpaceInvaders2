@@ -39,6 +39,9 @@
 		<Unit filename="debug.log" />
 		<Unit filename="src/Invaders2.cpp" />
 		<Unit filename="src/Invaders2.h" />
+		<Unit filename="src/curses/curses.cpp" />
+		<Unit filename="src/intro.txt" />
+		<Unit filename="src/intro1.txt" />
 		<Unit filename="src/movement/movement.cpp" />
 		<Unit filename="src/system/system.cpp" />
 		<Extensions>

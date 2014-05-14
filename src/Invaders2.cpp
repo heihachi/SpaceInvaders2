@@ -1,13 +1,15 @@
 #define WIN32
 //#define LINUX
 #include "Invaders2.h"
+
+// these are incase the linker doesnt link correctly
 //#include "system/system.cpp"
 //#include "movement/movement.cpp"
 
 
 /*
  * To-Do list:
- * create animation - convert vectors to character arrays and wmove waddch for easier management and add color
+ * DONE - create animation - convert vectors to character arrays and wmove waddch for easier management and add color
  * Fix bullets
  * Get score working
  * boss
@@ -16,7 +18,6 @@
 int main()
 {
     Game SpaceInvaders;
-    cout << "" << endl;
     return 0;
 }
 
@@ -47,6 +48,6 @@ int main()
 21 !|                                                                                |
 22  +--------------------------------------------------------------------------------+
 23  +--------------------------------------------------------------------------------+
-24  |Score: 0                                                               Lives: 3 +
+24  | Score: 0                                                              Lives: 3 +
 25  +--------------------------------------------------------------------------------+
 */
