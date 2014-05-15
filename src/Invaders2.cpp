@@ -10,14 +10,18 @@
 /*
  * To-Do list:
  * DONE - create animation - convert vectors to character arrays and wmove waddch for easier management and add color
- * Fix bullets
- * Get score working
+ * SEMI_DONE Fix bullets
+ * DONE Get score working
  * boss
- * random alien bullets
+ * SEMI random alien bullets
 */
 int main()
 {
     Game SpaceInvaders;
+    if(SpaceInvaders.numberOfAliens == 0)
+        cout << "YOU WIN!" << endl;
+    else
+        cout << "GAME OVER!" << endl;
     return 0;
 }
 

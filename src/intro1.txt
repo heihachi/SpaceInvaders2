@@ -13,12 +13,12 @@
 |                                                                              |
 |                                                                              |
 |                        ############################                          |
-|                        ####Press Enter to start####                          |
+|                        ###                      ###                          |
+|                        ### Press Enter to start ###                          |
+|                        ###                      ###                          |
 |                        ############################                          |
 |                                                                              |
-|                                                                              |
 |                        Programmed by: James Bishop                           |
-|                                                                              |
 |                                                                              |
 |                                   Credits                                    |
 |                  Taito Corporation for making Space Invaders                 |

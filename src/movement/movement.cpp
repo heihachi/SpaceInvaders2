@@ -13,6 +13,7 @@ bool Game::moveAliens(time_t rawtime)
     time_t temp = time(NULL);
     if(alienGroup.reachedEdge == false)
     {
+        int tempAlienCount = 0;
         if(temp > rawtime)
         {
             for(int i = 0;i<BOARDROWSIZE;i++)
@@ -21,11 +22,17 @@ bool Game::moveAliens(time_t rawtime)
                 {
                     for(int j = BOARDCOLUMNSIZE-1;j>=0;j--)
                     {
-                        if(board[i][j] == ALIEN)
+                        if(board[i][j] == ALIEN1 || board[i][j] == ALIEN2 || board[i][j] == ALIEN3)
                         {
+                            tempAlienCount++;
                             if(board[i][j+1] != '|')
                             {
-                                board[i][j+1] = ALIEN;
+                                if(board[i][j] == ALIEN1)
+                                    board[i][j+1] = ALIEN1;
+                                else if(board[i][j] == ALIEN2)
+                                    board[i][j+1] = ALIEN2;
+                                else if(board[i][j] == ALIEN3)
+                                    board[i][j+1] = ALIEN3;
                                 board[i][j] = ' ';
                             }
                             else
@@ -42,11 +49,17 @@ bool Game::moveAliens(time_t rawtime)
                 {
                     for(int j = 0;j<BOARDCOLUMNSIZE;j++)
                     {
-                        if(board[i][j] == ALIEN)
+                        if(board[i][j] == ALIEN1 || board[i][j] == ALIEN2 || board[i][j] == ALIEN3)
                         {
+                            tempAlienCount++;
                             if(board[i][j-1] != '|')
                             {
-                                board[i][j-1] = ALIEN;
+                                if(board[i][j] == ALIEN1)
+                                    board[i][j-1] = ALIEN1;
+                                else if(board[i][j] == ALIEN2)
+                                    board[i][j-1] = ALIEN2;
+                                else if(board[i][j] == ALIEN3)
+                                    board[i][j-1] = ALIEN3;
                                 board[i][j] = ' ';
                             }
                             else
@@ -61,6 +74,7 @@ bool Game::moveAliens(time_t rawtime)
                 }
             }
             this->rawtime = temp;
+            numberOfAliens = tempAlienCount;
         }
     }
     else if(alienGroup.reachedEdge == true)
@@ -71,9 +85,14 @@ bool Game::moveAliens(time_t rawtime)
             {
                 for(int j = BOARDCOLUMNSIZE-1;j>=0;j--)
                 {
-                    if(board[i][j] == ALIEN)
+                    if(board[i][j] == ALIEN1 || board[i][j] == ALIEN2 || board[i][j] == ALIEN3)
                     {
-                        board[i+1][j] = ALIEN;
+                        if(board[i][j] == ALIEN1)
+                            board[i+1][j] = ALIEN1;
+                        else if(board[i][j] == ALIEN2)
+                            board[i+1][j] = ALIEN2;
+                        else if(board[i][j] == ALIEN3)
+                            board[i+1][j] = ALIEN3;
                         board[i][j] = ' ';
                     }
                 }
