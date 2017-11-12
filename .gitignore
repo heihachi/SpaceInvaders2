@@ -21,8 +21,14 @@
 *.app
 
 # Hide obj and bin folders and files
+.vscode/
 bin/Debug/*.exe
+bin/Debug/src/
+bin/Debug/src/intro.txt
+bin/Debug/src/intro1.txt
 bin/Release/*.exe
+bin/Release/src/intro.txt
+bin/Release/src/intro1.txt
 obj/Debug/*.o
 obj/Release/*.o
 debug.log
